@@ -435,6 +435,15 @@ public final class AlwaysOnOverlayService extends Service
       case '\t': return KeyEvent.KEYCODE_TAB;
       case ',': return KeyEvent.KEYCODE_COMMA;
       case '.': return KeyEvent.KEYCODE_PERIOD;
+      case '/': return KeyEvent.KEYCODE_SLASH;
+      case ';': return KeyEvent.KEYCODE_SEMICOLON;
+      case '\'': return KeyEvent.KEYCODE_APOSTROPHE;
+      case '\\': return KeyEvent.KEYCODE_BACKSLASH;
+      case '-': return KeyEvent.KEYCODE_MINUS;
+      case '=': return KeyEvent.KEYCODE_EQUALS;
+      case '[': return KeyEvent.KEYCODE_LEFT_BRACKET;
+      case ']': return KeyEvent.KEYCODE_RIGHT_BRACKET;
+      case '`': return KeyEvent.KEYCODE_GRAVE;
       default: return 0;
     }
   }
@@ -473,6 +482,10 @@ public final class AlwaysOnOverlayService extends Service
 
         case Editing:
           handleEditing(value.getEditing());
+          return;
+
+        case Slider:
+          handleSlider(value.getSlider(), value.getSliderRepeat(), meta);
           return;
 
         case Event:
@@ -535,8 +548,67 @@ public final class AlwaysOnOverlayService extends Service
         case PASTE: sendContextMenu(android.R.id.paste); break;
         case CUT: sendContextMenu(android.R.id.cut); break;
         case SELECT_ALL: sendContextMenu(android.R.id.selectAll); break;
-        default: break;
+
+        case PASTE_PLAIN: sendContextMenu(android.R.id.pasteAsPlainText); break;
+        case UNDO: sendContextMenu(android.R.id.undo); break;
+        case REDO: sendContextMenu(android.R.id.redo); break;
+        case REPLACE: sendContextMenu(android.R.id.replaceText); break;
+        case SHARE: sendContextMenu(android.R.id.shareText); break;
+        case ASSIST: sendContextMenu(android.R.id.textAssist); break;
+        case AUTOFILL: sendContextMenu(android.R.id.autofill); break;
+
+        case DELETE_WORD:
+          sendKeyDownUp(KeyEvent.KEYCODE_DEL,
+              KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON);
+          break;
+
+        case FORWARD_DELETE_WORD:
+          sendKeyDownUp(KeyEvent.KEYCODE_FORWARD_DEL,
+              KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON);
+          break;
+
+        case SELECTION_CANCEL:
+          sendKeyDownUp(KeyEvent.KEYCODE_ESCAPE, 0);
+          break;
       }
+    }
+
+    private void handleSlider(KeyValue.Slider s, int r, int metaState)
+    {
+      if (r == 0)
+        return;
+
+      int n = Math.abs(r);
+
+      switch (s)
+      {
+        case Cursor_left:
+          repeatKey((r > 0) ? KeyEvent.KEYCODE_DPAD_LEFT : KeyEvent.KEYCODE_DPAD_RIGHT, n, metaState);
+          break;
+
+        case Cursor_right:
+          repeatKey((r > 0) ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT, n, metaState);
+          break;
+
+        case Cursor_up:
+          repeatKey((r > 0) ? KeyEvent.KEYCODE_DPAD_UP : KeyEvent.KEYCODE_DPAD_DOWN, n, metaState);
+          break;
+
+        case Cursor_down:
+          repeatKey((r > 0) ? KeyEvent.KEYCODE_DPAD_DOWN : KeyEvent.KEYCODE_DPAD_UP, n, metaState);
+          break;
+
+        case Selection_cursor_left:
+        case Selection_cursor_right:
+          // Keep minimal: selection slider not handled in overlay mode for now.
+          break;
+      }
+    }
+
+    private void repeatKey(int keyCode, int n, int metaState)
+    {
+      while (n-- > 0)
+        sendKeyDownUp(keyCode, metaState);
     }
   }
 }
