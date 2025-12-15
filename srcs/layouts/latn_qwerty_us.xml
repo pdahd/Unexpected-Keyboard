@@ -1,43 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file defines the QWERTY (US) layout.
-
-A layout is made of keys arranged into rows. Each keys can be assigned several
-symbols.
-'key0' assigns the symbol on the middle of the key. 'nw', 'ne', etc.. assign
-symbols to the corners of a key, they are arranged following the cardinal
-directions:
-
-   nw   n   ne
-   w    c    e
-   sw   s   se
-
-Symbols prefixed with 'loc ' are not visible on the keyboard. They are used to
-specify a place for a key, if it needed to be added to the layout later.
-(for example, by the "Add keys to keyboard" option)
-
-Keys can be made bigger with the 'width' attribute and blank space can be added
-on the left of a key with the 'shift' attribute.
-
-You can define your own bottom row by simply adding another '<row>...<row/>' tag
-then disabling the built-in bottom row by adding 'bottom_row="false"' to the
-keyboard metadata.
-
-Useful links.
-
-- Web based editor that will simplify editing of this file.
-  https://unexpected-keyboard-layout-editor.lixquid.com
-
-- Full guide on how to edit the layout.
-  https://github.com/Julow/Unexpected-Keyboard/tree/master/doc/Custom-layouts.md
-
-- Current definition of the bottom row (for easy importing).
-  https://github.com/Julow/Unexpected-Keyboard/tree/master/res/xml/bottom_row.xml
-
-- Built-in layouts (for easy importing)
-  https://github.com/Julow/Unexpected-Keyboard/tree/master/srcs/layouts
-
--->
-<keyboard name="QWERTY (US)" script="latin">
+<keyboard name="QWERTY (US)" script="latin" bottom_row="false">
   <row>
     <key c="q" ne="1" se="loc esc"/>
     <key c="w" nw="~" ne="2" sw="\@"/>
@@ -50,8 +12,12 @@ Useful links.
     <key c="o" ne="9" sw="(" se=")"/>
     <key c="p" ne="0"/>
   </row>
+
+  <!-- Home row with 2 side "slots" (0.5 width each) -->
   <row>
-    <key shift="0.5" c="a" nw="loc tab" ne="`"/>
+    <!-- Left slot: top = clipboard (optional), bottom = 123+ numeric (fixed) -->
+    <key width="0.5" c="removed" ne="loc switch_clipboard" se="switch_numeric"/>
+    <key c="a" nw="loc tab" ne="`"/>
     <key c="s" ne="loc §" sw="loc ß"/>
     <key c="d"/>
     <key c="f"/>
@@ -60,7 +26,10 @@ Useful links.
     <key c="j" se="}" sw="{"/>
     <key c="k" sw="[" se="]"/>
     <key c="l" ne="|" sw="\\"/>
+    <!-- Right slot: top = emoji (fixed), bottom = change method (optional) -->
+    <key width="0.5" c="removed" nw="switch_emoji" sw="loc change_method"/>
   </row>
+
   <row>
     <key width="1.5" c="shift" ne="loc capslock"/>
     <key c="z"/>
@@ -71,5 +40,44 @@ Useful links.
     <key c="n" ne=":" sw=";"/>
     <key c="m" ne="&quot;" sw="'"/>
     <key width="1.5" c="backspace" ne="delete"/>
+  </row>
+
+  <!-- Custom bottom row for this layout only (copied from res/xml/bottom_row.xml),
+       with the 4 small buttons removed from Ctrl/Fn to reduce clutter.
+       We keep config (gear) on Fn, as requested. -->
+  <row height="0.95">
+    <!-- Ctrl: keep greekmath/meta locations, remove clipboard/numeric -->
+    <key width="1.7"
+         key0="ctrl"
+         key1="loc switch_greekmath"
+         key2="loc meta"/>
+    <!-- Fn: keep alt + config, remove change_method + emoji -->
+    <key width="1.1"
+         key0="fn"
+         key1="loc alt"
+         key4="config"/>
+    <!-- Space: keep cursor slider + layout switch forward/back -->
+    <key width="4.4"
+         key0="space"
+         key7="switch_forward"
+         key8="switch_backward"
+         key5="cursor_left"
+         key6="cursor_right"/>
+    <!-- Arrows block -->
+    <key width="1.1"
+         key0="loc compose"
+         key7="up"
+         key6="right"
+         key5="left"
+         key8="down"
+         key1="loc home"
+         key2="loc page_up"
+         key3="loc end"
+         key4="loc page_down"/>
+    <!-- Enter -->
+    <key width="1.7"
+         key0="enter"
+         key1="loc voice_typing"
+         key2="action"/>
   </row>
 </keyboard>
