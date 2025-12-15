@@ -16,7 +16,7 @@
   <!-- Home row with 2 side "slots" (0.5 width each) -->
   <row>
     <!-- Left slot: top = clipboard (optional), bottom = 123+ numeric (fixed) -->
-    <key width="0.5" c="loc f11_placeholder" ne="loc switch_clipboard" se="switch_numeric"/>
+    <key width="0.5" c="loc f11_placeholder" n="loc switch_clipboard" s="switch_numeric"/>
     <key c="a" nw="loc tab" ne="`"/>
     <key c="s" ne="loc §" sw="loc ß"/>
     <key c="d"/>
@@ -27,7 +27,7 @@
     <key c="k" sw="[" se="]"/>
     <key c="l" ne="|" sw="\\"/>
     <!-- Right slot: top = emoji (fixed), bottom = change method (optional) -->
-    <key width="0.5" c="loc f12_placeholder" nw="switch_emoji" sw="loc change_method"/>
+    <key width="0.5" c="loc f12_placeholder" n="switch_emoji" s="loc change_method"/>
   </row>
 
   <row>
